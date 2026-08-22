@@ -8,16 +8,17 @@ import java.util.List;
 
 public class UsuarioDAO {
 
-    /** Autentica contra la BD comparando SHA-256 (mismo algoritmo usado en el script SQL: SHA2(x,256)). */
+    /** Autentica contra la BD aceptando tanto contraseñas en texto plano como con hash SHA-256. */
     public Usuario autenticar(String usuario, String passwordPlano) throws SQLException {
         String hash = sha256(passwordPlano);
         String sql = "SELECT u.id, u.usuario, u.nombre_completo, u.rol_id, r.nombre AS rol_nombre, u.activo "
                 + "FROM usuarios u JOIN roles r ON r.id = u.rol_id "
-                + "WHERE u.usuario = ? AND u.password_hash = ? AND u.activo = TRUE";
+                + "WHERE u.usuario = ? AND (u.password_hash = ? OR u.password_hash = ?) AND u.activo = TRUE";
         try (Connection con = new Conexion().getConnetion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, usuario);
             ps.setString(2, hash);
+            ps.setString(3, passwordPlano);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Usuario(

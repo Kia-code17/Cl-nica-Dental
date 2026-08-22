@@ -1,0 +1,16 @@
+# Configuración de Base de Datos para Clínica Dental
+# Puedes dejar estos valores para XAMPP local o cambiarlos por tu hosting en la nube (Clever Cloud, Aiven, etc.)
+
+# Para XAMPP Local:
+db.host=localhost
+db.port=3306
+db.name=clinica_dental
+db.user=root
+db.password=
+
+# Para MySQL en la Nube (Ejemplo con Clever Cloud o Aiven):
+# db.host=bxxxxxxxxxx-mysql.services.clever-cloud.com
+# db.port=3306
+# db.name=bxxxxxxxxxx
+# db.user=uxxxxxxxxxx
+# db.password=pxxxxxxxxxx

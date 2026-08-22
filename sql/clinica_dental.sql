@@ -516,7 +516,7 @@ CREATE TABLE `v_inventario_bajo_stock` (
 --
 DROP TABLE IF EXISTS `v_citas_del_dia`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_citas_del_dia`  AS SELECT `c`.`id` AS `id`, `p`.`nombre` AS `paciente`, `d`.`nombre` AS `doctor`, `c`.`fecha` AS `fecha`, `c`.`hora` AS `hora`, `c`.`estado` AS `estado` FROM ((`citas` `c` join `pacientes` `p` on(`p`.`id` = `c`.`paciente_id`)) join `doctores` `d` on(`d`.`id` = `c`.`doctor_id`)) WHERE `c`.`fecha` = curdate() ;
+CREATE VIEW `v_citas_del_dia` AS SELECT `c`.`id` AS `id`, `p`.`nombre` AS `paciente`, `d`.`nombre` AS `doctor`, `c`.`fecha` AS `fecha`, `c`.`hora` AS `hora`, `c`.`estado` AS `estado` FROM ((`citas` `c` join `pacientes` `p` on(`p`.`id` = `c`.`paciente_id`)) join `doctores` `d` on(`d`.`id` = `c`.`doctor_id`)) WHERE `c`.`fecha` = curdate() ;
 
 -- --------------------------------------------------------
 
@@ -525,7 +525,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_estado_cuenta_paciente`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_estado_cuenta_paciente`  AS SELECT `f`.`paciente_id` AS `paciente_id`, `p`.`nombre` AS `paciente`, sum(`f`.`total`) AS `total_facturado`, coalesce(sum(`pg`.`monto`),0) AS `total_pagado`, sum(`f`.`total`) - coalesce(sum(`pg`.`monto`),0) AS `saldo_pendiente` FROM ((`facturas` `f` join `pacientes` `p` on(`p`.`id` = `f`.`paciente_id`)) left join `pagos` `pg` on(`pg`.`factura_id` = `f`.`id`)) GROUP BY `f`.`paciente_id`, `p`.`nombre` ;
+CREATE VIEW `v_estado_cuenta_paciente` AS SELECT `f`.`paciente_id` AS `paciente_id`, `p`.`nombre` AS `paciente`, sum(`f`.`total`) AS `total_facturado`, coalesce(sum(`pg`.`monto`),0) AS `total_pagado`, sum(`f`.`total`) - coalesce(sum(`pg`.`monto`),0) AS `saldo_pendiente` FROM ((`facturas` `f` join `pacientes` `p` on(`p`.`id` = `f`.`paciente_id`)) left join `pagos` `pg` on(`pg`.`factura_id` = `f`.`id`)) GROUP BY `f`.`paciente_id`, `p`.`nombre` ;
 
 -- --------------------------------------------------------
 
@@ -534,7 +534,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_inventario_bajo_stock`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_inventario_bajo_stock`  AS SELECT `accesorios`.`id` AS `id`, `accesorios`.`nombre` AS `nombre`, `accesorios`.`stock` AS `stock`, `accesorios`.`stock_minimo` AS `stock_minimo` FROM `accesorios` WHERE `accesorios`.`stock` <= `accesorios`.`stock_minimo` ;
+CREATE VIEW `v_inventario_bajo_stock` AS SELECT `accesorios`.`id` AS `id`, `accesorios`.`nombre` AS `nombre`, `accesorios`.`stock` AS `stock`, `accesorios`.`stock_minimo` AS `stock_minimo` FROM `accesorios` WHERE `accesorios`.`stock` <= `accesorios`.`stock_minimo` ;
 
 --
 -- Índices para tablas volcadas
